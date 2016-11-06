@@ -7,11 +7,31 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "InputHandler.h"
+#import "Player.h"
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
-        // insert code here...
-        NSLog(@"Hello, World!");
+        
+        NSLog(@"Welcome to snakes and ladders!");
+        
+        InputHandler *inputHandler = [[InputHandler alloc] init];
+        
+        Player *playerOne = [[Player alloc] initWithName:@"Suvan"];
+        
+        while (playerOne.gameOn) {
+            
+            NSString *userInput = [inputHandler inputWithPrompt:@"Type 'r' or 'roll' to roll the dice"];
+            
+            if ([userInput isEqualToString:@"roll"] || [userInput isEqualToString:@"r"]) {
+                [playerOne roll];
+            }
+            
+        }
+        
+        NSLog(@"Congratulations! You win!");
+        
+        
     }
     return 0;
 }
