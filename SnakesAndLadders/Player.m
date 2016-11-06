@@ -39,36 +39,40 @@
 
 -(void)roll {
     
-//    int lowerBound = 1;
-//    int upperBound = 6;
-//    
-//    // generate random number for dice roll
-//    int diceValue = lowerBound + arc4random() % (upperBound - lowerBound);
+    int lowerBound = 1;
+    int upperBound = 6;
     
-    int diceValue = 4;
+    // generate random number for dice roll
+    int diceValue = lowerBound + arc4random() % (upperBound - lowerBound);
+    
+    
     
     // update current square with roll value
     self.currentSquare = [NSNumber numberWithInt:([self.currentSquare intValue] + diceValue)];
     
-    // deal with snakes and ladders
+    NSLog(@"You rolled a: %d", diceValue);
     
-    for (NSNumber *specialSquare in self.gameLogic) {
-        if ([self.currentSquare integerValue] == [specialSquare integerValue]) {
+    // DEAL WITH SNAKES AND LADDERS
+    if ([self.gameLogic objectForKey:self.currentSquare]) {
+        
+        if ([self.currentSquare integerValue] < [[self.gameLogic objectForKey:self.currentSquare] integerValue]) {
             
-            self.currentSquare = [self.gameLogic objectForKey:specialSquare];
+            int newSquare = [[self.gameLogic objectForKey:self.currentSquare] intValue];
+            self.currentSquare = [NSNumber numberWithInt:newSquare];
             
-            if ([specialSquare integerValue] < [[self.gameLogic objectForKey:specialSquare] integerValue]) {
-                NSLog(@"\n%@ rolled a %d\nStairway to heaven! You jumped to square %ld!", self.name, diceValue, (long) self.currentSquare);
-            } else {
-                NSLog(@"\n%@ rolled a %d\nYou landed on a snake! Go back to square %ld!", self.name, diceValue, (long) self.currentSquare);
-            }
-            break;
+            NSLog(@"Stairway to heaven! Jump to square %d", newSquare);
+            
         } else {
+            int newSquare = [[self.gameLogic objectForKey:self.currentSquare] intValue];
+            self.currentSquare = [NSNumber numberWithInt:newSquare];
             
-            NSLog(@"\n%@ rolled a %d and is now on square %ld", self.name, diceValue,(long) self.currentSquare);
-            break;
+            NSLog(@"You landed on a snake! Go back to square %d",newSquare);
         }
         
+    } else {
+        int newSquare = [self.currentSquare intValue];
+        
+        NSLog(@"You landed on square %d", newSquare);
     }
     
     // end game check
